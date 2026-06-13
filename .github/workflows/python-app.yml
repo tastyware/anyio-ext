@@ -34,10 +34,10 @@ jobs:
       run: uv sync --locked --dev
 
     - name: Lint with ruff
-      run: uv run ruff check anyio_utils/ tests/
+      run: uv run ruff check anyio_ext/ tests/
 
     - name: Type check with pyright
-      run: uv run pyright anyio_utils/ tests/
+      run: uv run pyright anyio_ext/ tests/
 
     - name: Test with pytest
       run: uv run pytest -v tests/
