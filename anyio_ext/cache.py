@@ -11,7 +11,7 @@ from weakref import WeakValueDictionary
 
 from anyio import Lock, current_time
 
-from anyio_utils.types import P, Q, R, S
+from anyio_ext.types import P, Q, R, S
 
 
 class _BoundMethod(Generic[P, R]):
@@ -23,6 +23,9 @@ class _BoundMethod(Generic[P, R]):
         return await self._cached(self._instance, *args, **kwargs)
 
     def invalidate(self, *args: P.args, **kwargs: P.kwargs) -> None:
+        """
+        Invalidate the key built from the given arguments.
+        """
         self._cached.invalidate(self._instance, *args, **kwargs)
 
 
@@ -36,6 +39,10 @@ class CachedFunction(Generic[P, R]):
         exclude: set[str] | None,
         key_fns: dict[str, Callable[[Any], Any]] | None,
     ) -> None:
+        #: number of cache hits
+        self.hits = 0
+        #: number of cache misses
+        self.misses = 0
         self._fn = fn
         self._sig = inspect.signature(fn)
         self._ttl = (
@@ -74,11 +81,15 @@ class CachedFunction(Generic[P, R]):
         if self._max_keys is not None and len(self._cache) > self._max_keys:
             self._cache.popitem(last=False)
 
+    def __len__(self) -> int:
+        return len(self._cache)
+
     async def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R:
         key = self.build_key(*args, **kwargs)
         res = self._cache.get(key)
         if res and res[0] > current_time():
             self._cache.move_to_end(key)
+            self.hits += 1
             return res[1]
         lock = self._locks.get(key)
         if lock is None:
@@ -87,7 +98,9 @@ class CachedFunction(Generic[P, R]):
             res = self._cache.get(key)
             if res and res[0] > current_time():
                 self._cache.move_to_end(key)
+                self.hits += 1
                 return res[1]
+            self.misses += 1
             val = await self._fn(*args, **kwargs)
             self._store(key, (current_time() + self._ttl, val))
             return val

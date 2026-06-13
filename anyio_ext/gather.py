@@ -3,7 +3,7 @@ from typing import Any, overload
 
 from anyio import create_task_group
 
-from anyio_utils.types import R, S, T, U, V, W
+from anyio_ext.types import R, S, T, U, V, W
 
 
 @overload
@@ -77,6 +77,8 @@ async def gather(
 ) -> tuple[Any, ...]:
     """
     Re-implementation of :func:`asyncio.gather` that uses an anyio task group.
+
+    :param return_exceptions: whether to return exceptions instead of raising them
     """
     if not awaitables:
         return ()

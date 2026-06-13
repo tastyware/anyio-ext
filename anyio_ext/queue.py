@@ -5,7 +5,7 @@ from typing import Generic
 from anyio import Event, TaskInfo, WouldBlock, get_current_task
 from anyio.lowlevel import checkpoint
 
-from anyio_utils.types import T
+from anyio_ext.types import T
 
 
 @dataclass(eq=False)

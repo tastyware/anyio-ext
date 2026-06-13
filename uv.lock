@@ -16,7 +16,7 @@ wheels = [
 ]
 
 [[package]]
-name = "anyio-utils"
+name = "anyio-ext"
 source = { editable = "." }
 dependencies = [
     { name = "anyio" },

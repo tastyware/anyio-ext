@@ -1,7 +1,7 @@
 import pytest
 from anyio import WouldBlock, create_task_group, fail_after, move_on_after, sleep
 
-from anyio_utils.queue import Queue, Stack
+from anyio_ext.queue import Queue, Stack
 
 pytestmark = pytest.mark.anyio
 

@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from anyio import sleep
 
-from anyio_utils import cached, gather
+from anyio_ext import cached, gather
 
 pytestmark = pytest.mark.anyio
 
@@ -88,7 +88,7 @@ async def test_cache_canonical_args():
 async def test_cache_complex_args():
     calls = 0
 
-    @cached(ttl=60, key_fns={"items": lambda l: tuple(l)})
+    @cached(ttl=60, key_fns={"items": lambda i: tuple(i)})
     async def work(items: list[int], options: tuple[str, int]) -> int:
         nonlocal calls
         calls += 1
@@ -177,3 +177,39 @@ async def test_cache_invalidate():
     work.invalidate(1)
     assert await work(1) == 2
     assert calls == 2
+
+
+async def test_cache_stats():
+    calls = 0
+
+    @cached
+    async def work() -> int:
+        nonlocal calls
+        calls += 1
+        return 42
+
+    assert await work() == 42
+    assert await work() == 42
+    assert calls == 1
+    assert work.hits == 1
+    assert work.misses == 1
+    assert len(work) == 1
+
+
+async def test_cache_method():
+    class MyClass:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        @cached
+        async def work(self) -> int:
+            self.calls += 1
+            return 42
+
+    mc = MyClass()
+    assert await mc.work() == 42
+    assert await mc.work() == 42
+    assert mc.calls == 1
+    assert MyClass.work.hits == 1
+    assert MyClass.work.misses == 1
+    assert len(MyClass.work) == 1

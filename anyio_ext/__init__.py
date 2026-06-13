@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import functools
 from collections.abc import Awaitable, Callable
-from typing import ParamSpec, TypeVar
 
 from anyio import CapacityLimiter
 from anyio.to_thread import run_sync
 
-from anyio_utils.cache import cached
-from anyio_utils.gather import gather
-from anyio_utils.queue import Queue, Stack
+from anyio_ext.cache import cached
+from anyio_ext.gather import gather
+from anyio_ext.queue import Queue, Stack
+from anyio_ext.types import P, R
 
 VERSION = "0.1.0"
 __version__ = VERSION

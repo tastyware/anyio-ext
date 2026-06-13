@@ -3,18 +3,18 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "anyio_utils/__init__.py"
+path = "anyio_ext/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-include = ["anyio_utils/**/*"]
+include = ["anyio_ext/**/*"]
 exclude = ["**/__pycache__/**"]
 
 [tool.hatch.build.targets.sdist]
-include = ["anyio_utils/**/*"]
+include = ["anyio_ext/**/*"]
 exclude = ["**/__pycache__/**"]
 
 [project]
-name = "anyio-utils"
+name = "anyio-ext"
 description = "A collection of helpful utilities for anyio."
 readme = "README.md"
 classifiers = [
@@ -56,10 +56,10 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/tastyware/anyio-utils"
+Homepage = "https://github.com/tastyware/anyio-ext"
 Funding = "https://github.com/sponsors/tastyware"
-Source = "https://github.com/tastyware/anyio-utils"
-Changelog = "https://github.com/tastyware/anyio-utils/releases"
+Source = "https://github.com/tastyware/anyio-ext"
+Changelog = "https://github.com/tastyware/anyio-ext/releases"
 
 [dependency-groups]
 dev = [
@@ -77,4 +77,4 @@ testpaths = "tests"
 select = ["E", "F", "I", "UP"]
 
 [tool.pyright]
-strict = ["anyio_utils/"]
+strict = ["anyio_ext/"]
