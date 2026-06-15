@@ -51,7 +51,7 @@ authors = [
     { name = "Graeme Holliday", email = "graeme@tastyware.dev" }
 ]
 dependencies = [
-    "anyio>=4.13.0",
+    "anyio>=4.14.0",
 ]
 dynamic = ["version"]
 

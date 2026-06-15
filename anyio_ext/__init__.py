@@ -7,11 +7,11 @@ from anyio import CapacityLimiter
 from anyio.to_thread import run_sync
 
 from anyio_ext.cache import cached
-from anyio_ext.gather import gather
+from anyio_ext.concurrency import as_completed, gather
 from anyio_ext.queue import Queue, Stack
 from anyio_ext.types import P, R
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 __version__ = VERSION
 
 
@@ -59,4 +59,4 @@ def asyncify(
     return wrapper
 
 
-__all__ = ["Queue", "Stack", "asyncify", "cached", "gather"]
+__all__ = ["Queue", "Stack", "as_completed", "asyncify", "cached", "gather"]
