@@ -68,8 +68,7 @@ async def gather(*coros: Coroutine[Any, Any, Any]) -> tuple[Any, ...]:
     handles: list[TaskHandle[Any, Any]] = []
 
     async with create_task_group() as tg:
-        for coro in coros:
-            handles.append(tg.create_task(coro))
+        handles.extend([tg.create_task(coro) for coro in coros])
 
     return tuple(h.return_value for h in handles)
 
@@ -92,8 +91,8 @@ async def as_completed(
 
     async with recv, create_task_group() as tg:
         async with send:
-            for awaitable in coros:
-                tg.start_soon(runner, awaitable, send.clone())
+            for coro in coros:
+                tg.start_soon(runner, coro, send.clone())
         try:
             yield recv
         finally:
